@@ -373,9 +373,9 @@ public class crearOrdenPedidoForm extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(101, 101, 101)
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(192, 192, 192)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(121, 121, 121))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -485,54 +485,54 @@ public class crearOrdenPedidoForm extends javax.swing.JDialog {
 //                if (cbx_documento.getSelectedItem().toString().equals("--SELECCIONE--")) {
 //                    JOptionPane.showMessageDialog(null, "LLENE DOCUMENTO!");
 //                } else {
-                    if (txtObservacion.getText().equals("")) {
-                        JOptionPane.showMessageDialog(null, "LLENE OBSERVACIÒN!");
+                if (txtObservacion.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "LLENE OBSERVACIÒN!");
+                } else {
+                    if (listadet.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "AGREGUE UN ITEM!");
+
                     } else {
-                        if (listadet.isEmpty()) {
-                            JOptionPane.showMessageDialog(null, "AGREGUE UN ITEM!");
 
-                        } else {
+                        CoProveedores coOrdenp = ObtenerDTO.ObtenerProveedorPedido(cbxProveedor.getSelectedItem().toString());
+                        InTipoDocumento coOrdend = ObtenerDTO.ObtenerDocumentoPedido("COMPRAS");
 
-                            CoProveedores coOrdenp = ObtenerDTO.ObtenerProveedorPedido(cbxProveedor.getSelectedItem().toString());
-                            InTipoDocumento coOrdend = ObtenerDTO.ObtenerDocumentoPedido("COMPRAS");
+                        cabOrden.setIdProveedor(BigInteger.valueOf(coOrdenp.getIdProveedor()));
+                        cabOrden.setIdDocumento(BigInteger.valueOf(coOrdend.getIdTipoDocumento()));
+                        cabOrden.setObservacion(txtObservacion.getText());
+                        cabOrden.setEstado("P");
+                        cabOrden.setFechaEmision(d);
+                        cabOrden.setSeSucursal(seSucursal);
+                        cabOrden.setFormaPago(cbx_FormaPago.getSelectedItem().toString());
 
-                            cabOrden.setIdProveedor(BigInteger.valueOf(coOrdenp.getIdProveedor()));
-                            cabOrden.setIdDocumento(BigInteger.valueOf(coOrdend.getIdTipoDocumento()));
-                            cabOrden.setObservacion(txtObservacion.getText());
-                            cabOrden.setEstado("P");
-                            cabOrden.setFechaEmision(d);
-                            cabOrden.setSeSucursal(seSucursal);
-                            cabOrden.setFormaPago(cbx_FormaPago.getSelectedItem().toString());
+                        cabOrden.setUsuarioCreacion(seUsuario.getUsuario());
+                        cabOrden.setFechaCreacion(d);
 
-                            cabOrden.setUsuarioCreacion(seUsuario.getUsuario());
-                            cabOrden.setFechaCreacion(d);
+                        try {
 
-                            try {
+                            CoOrdenPedido pk = idCabecera.guardarPedido(cabOrden);
 
-                                CoOrdenPedido pk = idCabecera.guardarPedido(cabOrden);
+                            for (int i = 0; i < listadet.size(); i++) {
+                                detOrden.setCoOrdenPedido(pk);
+                                detOrden.setCantidadSolicitada(listadet.get(i).getCantidadSolicitada());
+                                detOrden.setCoDetalleOrdenPedidoPK(new CoDetalleOrdenPedidoPK());
+                                detOrden.getCoDetalleOrdenPedidoPK().setIdProducto(listadet.get(i).getCoDetalleOrdenPedidoPK().getIdProducto());
+                                detOrden.getCoDetalleOrdenPedidoPK().setLineaDetalle(listadet.get(i).getCoDetalleOrdenPedidoPK().getLineaDetalle());
+                                detOrden.setDescripcion(listadet.get(i).getDescripcion());
+                                detOrden.setEstado("A");
+                                detOrden.setFechaCreacion(d);
+                                detOrden.setUsuarioCreacion(seUsuario.getUsuario());
+                                detOrden.getCoOrdenPedido().setSeSucursal(seSucursal);
+                                detOrden.setFechaCreacion(d);
 
-                                for (int i = 0; i < listadet.size(); i++) {
-                                    detOrden.setCoOrdenPedido(pk);
-                                    detOrden.setCantidadSolicitada(listadet.get(i).getCantidadSolicitada());
-                                    detOrden.setCoDetalleOrdenPedidoPK(new CoDetalleOrdenPedidoPK());
-                                    detOrden.getCoDetalleOrdenPedidoPK().setIdProducto(listadet.get(i).getCoDetalleOrdenPedidoPK().getIdProducto());
-                                    detOrden.getCoDetalleOrdenPedidoPK().setLineaDetalle(listadet.get(i).getCoDetalleOrdenPedidoPK().getLineaDetalle());
-                                    detOrden.setDescripcion(listadet.get(i).getDescripcion());
-                                    detOrden.setEstado("A");
-                                    detOrden.setFechaCreacion(d);
-                                    detOrden.setUsuarioCreacion(seUsuario.getUsuario());
-                                    detOrden.getCoOrdenPedido().setSeSucursal(seSucursal);
-                                    detOrden.setFechaCreacion(d);
-
-                                    detOrdencontroller.create(detOrden);
-                                }
-
-                                JOptionPane.showMessageDialog(null, "GUARDADO EXITOSAMENTE");
-                                setVisible(false);
-
-                            } catch (Exception ex) {
-                                Logger.getLogger(crearOrdenPedidoForm.class.getName()).log(Level.SEVERE, null, ex);
+                                detOrdencontroller.create(detOrden);
                             }
+
+                            JOptionPane.showMessageDialog(null, "GUARDADO EXITOSAMENTE");
+                            setVisible(false);                           
+                            
+                        } catch (Exception ex) {
+                            Logger.getLogger(crearOrdenPedidoForm.class.getName()).log(Level.SEVERE, null, ex);
+                        }
 //                        }
 //                        }
                     }
@@ -588,8 +588,6 @@ public class crearOrdenPedidoForm extends javax.swing.JDialog {
         Point point = MouseInfo.getPointerInfo().getLocation();
         setLocation(point.x - x, point.y - y);
     }//GEN-LAST:event_jLabel1MouseDragged
-
-
 
     public String validarProductos(String datos) {
         String obj1 = "no";
