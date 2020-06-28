@@ -629,6 +629,7 @@ public class CotizacionVenta extends javax.swing.JDialog {
             }
         });
 
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/cotizacion.png"))); // NOI18N
         jButton4.setText("COTIZAR");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

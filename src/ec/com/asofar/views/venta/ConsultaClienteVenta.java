@@ -161,6 +161,7 @@ public class ConsultaClienteVenta extends javax.swing.JDialog {
         jButton3.setBackground(new java.awt.Color(254, 254, 254));
         jButton3.setFont(new java.awt.Font("Ubuntu", 1, 10)); // NOI18N
         jButton3.setForeground(new java.awt.Color(1, 1, 1));
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/edit-list.png"))); // NOI18N
         jButton3.setText("EDITAR");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -253,6 +254,7 @@ public class ConsultaClienteVenta extends javax.swing.JDialog {
         btn_editar.setBackground(new java.awt.Color(254, 254, 254));
         btn_editar.setFont(new java.awt.Font("Ubuntu", 1, 10)); // NOI18N
         btn_editar.setForeground(new java.awt.Color(1, 1, 1));
+        btn_editar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/edit-list.png"))); // NOI18N
         btn_editar.setText("EDITAR");
         btn_editar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -339,6 +341,7 @@ public class ConsultaClienteVenta extends javax.swing.JDialog {
 
         jButton5.setFont(new java.awt.Font("Ubuntu", 1, 10)); // NOI18N
         jButton5.setForeground(new java.awt.Color(1, 1, 1));
+        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/edit-list.png"))); // NOI18N
         jButton5.setText("EDITAR");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -433,6 +436,7 @@ public class ConsultaClienteVenta extends javax.swing.JDialog {
 
         btnimprimir.setFont(new java.awt.Font("Ubuntu", 1, 10)); // NOI18N
         btnimprimir.setForeground(new java.awt.Color(1, 1, 1));
+        btnimprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/imprimir_mesa.png"))); // NOI18N
         btnimprimir.setText("IMPRIMIR");
         btnimprimir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

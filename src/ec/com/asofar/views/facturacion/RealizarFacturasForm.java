@@ -297,6 +297,7 @@ public class RealizarFacturasForm extends javax.swing.JDialog {
         jLabel1.setText("%DESCUENTO:");
 
         jButton2.setFont(new java.awt.Font("Ubuntu", 1, 10)); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/edit-list.png"))); // NOI18N
         jButton2.setText("EDITAR");
         jButton2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 0), 1, true));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
