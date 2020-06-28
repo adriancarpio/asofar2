@@ -23,6 +23,7 @@ import ec.com.asofar.util.ClaseReporte;
 import ec.com.asofar.util.EntityManagerUtil;
 import ec.com.asofar.util.Render1;
 import ec.com.asofar.util.Tablas;
+import ec.com.asofar.views.compras.seleccionarOrdenPedidoCompraForm;
 import ec.com.asofar.views.producto.ConsultarProducto;
 import java.awt.Dimension;
 import java.awt.MouseInfo;
@@ -106,9 +107,6 @@ public class modificarOrdenPedidoForm extends javax.swing.JDialog {
         txtFecha.setText(FechaActual());
 
         CargarFormulario();
-
-
-
 
     }
 
@@ -416,7 +414,7 @@ public class modificarOrdenPedidoForm extends javax.swing.JDialog {
         BtnAprovar.setFont(new java.awt.Font("Ubuntu", 1, 10)); // NOI18N
         BtnAprovar.setForeground(new java.awt.Color(1, 1, 1));
         BtnAprovar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/aceptar_Mesa de trabajo 1.jpg"))); // NOI18N
-        BtnAprovar.setText("APROBAR");
+        BtnAprovar.setText("APROBAR Y CONTINUAR");
         BtnAprovar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnAprovarActionPerformed(evt);
@@ -460,10 +458,10 @@ public class modificarOrdenPedidoForm extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addComponent(BtnAnular, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(BtnAprovar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(BtnAprovar, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(btnimprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(71, 71, 71))
+                .addGap(20, 20, 20))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -518,7 +516,6 @@ public class modificarOrdenPedidoForm extends javax.swing.JDialog {
     }//GEN-LAST:event_BtnCancelarActionPerformed
 
 
-
     private void jTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MousePressed
 
         CoDetalleOrdenPedidoJpaController detOrdencontroller = new CoDetalleOrdenPedidoJpaController(EntityManagerUtil.ObtenerEntityManager());
@@ -555,7 +552,7 @@ public class modificarOrdenPedidoForm extends javax.swing.JDialog {
 
                             detalle = list2.get(i);
                             detalle.setEstado("I");
- 
+
                             detOrdencontroller.edit(detalle);
 
                             listadet.get(i).setEstado("I");
@@ -702,7 +699,9 @@ public class modificarOrdenPedidoForm extends javax.swing.JDialog {
                 cabOrdenController.edit(cab);
 
                 JOptionPane.showMessageDialog(null, "GUARDADO EXITOSAMENTE");
-                setVisible(false);
+                this.setVisible(false);
+                seleccionarOrdenPedidoCompraForm crearOrden = new seleccionarOrdenPedidoCompraForm(new javax.swing.JFrame(), true, seUsuario, seEmpresa, seSucursal);
+                crearOrden.setVisible(true);
 
             } catch (Exception ex) {
                 Logger.getLogger(modificarOrdenPedidoForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -832,17 +831,16 @@ public class modificarOrdenPedidoForm extends javax.swing.JDialog {
     public String validarProductos(String datos) {
         String obj1 = "no";
 
+        for (int i = 0; i < listadet.size(); i++) {
 
-            for (int i = 0; i < listadet.size(); i++) {
+            if (datos.equals("" + (listadet.get(i).getCoDetalleOrdenPedidoPK().getIdProducto()))) {
+                obj1 = "si";
 
-                if (datos.equals("" + (listadet.get(i).getCoDetalleOrdenPedidoPK().getIdProducto()))) {
-                    obj1 = "si";
-
-                    break;
-                }
-
+                break;
             }
-            
+
+        }
+
         return obj1;
 
     }

@@ -57,24 +57,24 @@ import javax.swing.Timer;
  * @author admin1
  */
 public class crearOrdenCompraForm extends javax.swing.JDialog {
-    
+
     int x, y;
     SeUsuarios seUsuario;
     SeEmpresa seEmpresa;
     SeSucursal seSucursal;
-    
+
     Boolean ivaBoolean;
     Boolean[] check;
-    
+
     BigDecimal TotalSubTotal = new BigDecimal("0.00");
     BigDecimal TotalIva = new BigDecimal("0.00");
     BigDecimal TotalDescuento = new BigDecimal("0.00");
     BigDecimal TotalCompra = new BigDecimal("0.00");
-    
+
     Date fecha = null;
-    
+
     Date d = new Date();
-    
+
     CoProveedoresJpaController proveedorController = new CoProveedoresJpaController(EntityManagerUtil.ObtenerEntityManager());
     InTipoDocumentoJpaController documentoController = new InTipoDocumentoJpaController(EntityManagerUtil.ObtenerEntityManager());
     InTipoMovimientoJpaController movimientoController = new InTipoMovimientoJpaController(EntityManagerUtil.ObtenerEntityManager());
@@ -82,14 +82,14 @@ public class crearOrdenCompraForm extends javax.swing.JDialog {
     CoDetalleOrdenPedidoJpaController detOrdenPedidocontroller = new CoDetalleOrdenPedidoJpaController(EntityManagerUtil.ObtenerEntityManager());
     OrdenCompraDaoExt obtenerIdCompra = new OrdenCompraDaoExt(EntityManagerUtil.ObtenerEntityManager());
     MovimientosDaoExt obtenerIdMovimiento = new MovimientosDaoExt(EntityManagerUtil.ObtenerEntityManager());
-    
+
     CoOrdenPedido cabOrden;
-    
+
     List<CoDetalleOrdenPedido> listadet = new ArrayList<CoDetalleOrdenPedido>();
     List<CoDetalleOrdenCompra> listadetCompra = new ArrayList<CoDetalleOrdenCompra>();
-    
+
     PrProductos objetopro = new PrProductos();
-    
+
     public crearOrdenCompraForm(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -98,12 +98,12 @@ public class crearOrdenCompraForm extends javax.swing.JDialog {
 //        CargarMovimiento();
 //        CargarMotivos();
         CargarFormulario();
-        
+
         Timer tiempo = new Timer(100, new crearOrdenCompraForm.horas());
         tiempo.start();
-        
+
     }
-    
+
     public crearOrdenCompraForm(java.awt.Frame parent, boolean modal, SeUsuarios us, SeEmpresa em, SeSucursal su, CoOrdenPedido objeto) {
         super(parent, modal);
         initComponents();
@@ -119,102 +119,102 @@ public class crearOrdenCompraForm extends javax.swing.JDialog {
 //        CargarMovimiento();
 //        CargarMotivos();
         CargarFormulario();
-        
+
     }
-    
+
     class horas implements ActionListener {
-        
+
         public void actionPerformed(ActionEvent e) {
             java.util.Date sistHora = new java.util.Date();
             String pmAm = "HH:mm:ss";
             SimpleDateFormat format = new SimpleDateFormat(pmAm);
             Calendar hoy = Calendar.getInstance();
             txtHora.setText(String.format(format.format(sistHora), hoy));
-            
+
         }
     }
-    
+
     public static String FechaActual() {
         Date fecha = new Date();
         SimpleDateFormat formatoFecha = new SimpleDateFormat("YYYY-MM-dd");
         return formatoFecha.format(fecha);
     }
-    
+
     public void CargarProveedor(CoOrdenPedido obj) {
         List<CoProveedores> listcaja = proveedorController.findCoProveedoresEntities();
         for (int i = 0; i < listcaja.size(); i++) {
-            
+
             if (listcaja.get(i).getIdProveedor() != null) {
                 if (listcaja.get(i).getIdProveedor() == obj.getIdProveedor().intValue()) {
                     TxtProveedor.setText(listcaja.get(i).getNombre());
-                    
+
                 }
             }
-            
+
         }
     }
-    
+
     public void CargarDocumento(CoOrdenPedido obj) {
         List<InTipoDocumento> listcaja = documentoController.findInTipoDocumentoEntities();
         for (int i = 0; i < listcaja.size(); i++) {
-            
+
             if (listcaja.get(i).getIdTipoDocumento() != null) {
                 if (listcaja.get(i).getIdTipoDocumento() == obj.getIdDocumento().intValue()) {
                     TxtDocumento.setText(listcaja.get(i).getNombreDocumento());
-                    
+
                 }
             }
-            
+
         }
     }
-    
+
     public void CargarMovimiento() {
 //        List<InTipoMovimiento> listcaja = movimientoController.findInTipoMovimientoEntities();
 //        for (int i = 0; i < listcaja.size(); i++) {
 //            cbx_movimiento.addItem(listcaja.get(i).getNombreMovimiento());
 //        }
     }
-    
+
     public void CargarMotivos() {
 //        List<InMotivos> listcaja = motivoController.findInMotivosEntities();
 //        for (int i = 0; i < listcaja.size(); i++) {
 //            cbx_motivo.addItem(listcaja.get(i).getNombre());
 //        }
     }
-    
+
     public void CargarFormulario() {
-        
+
         List<CoDetalleOrdenPedido> list = new ArrayList<CoDetalleOrdenPedido>();
-        
+
         list = detOrdenPedidocontroller.findCoDetalleOrdenPedidoEntities();
-        
+
         check = new Boolean[list.size()];  // inicializar el Boolean segun la lista
 
         for (int i = 0; i < list.size(); i++) {
-            
+
             check[i] = false; // setear valor falso
             System.out.println(" prueba  " + list.get(i).getDescripcion());
             if (list.get(i).getCoDetalleOrdenPedidoPK().getIdOrdenPedido() == (cabOrden.getCoOrdenPedidoPK().getIdOrdenPedido()) && list.get(i).getEstado().equals("A")) {
                 listadet.add(list.get(i));
-                
+
             }
-            
+
         }
-        
+
         CargarProveedor(cabOrden);
         CargarDocumento(cabOrden);
         detalleCompra();
-        
+
     }
-    
+
     public void detalleCompra() {
-        
+
         for (int i = 0; i < listadet.size(); i++) {
-            
+
             CoDetalleOrdenCompra detalle = new CoDetalleOrdenCompra();
-            
+
             detalle.setCoDetalleOrdenCompraPK(new CoDetalleOrdenCompraPK());
-            
+
             detalle.getCoDetalleOrdenCompraPK().setLineaDetalle(i + 1);
             detalle.getCoDetalleOrdenCompraPK().setIdProducto(listadet.get(i).getCoDetalleOrdenPedidoPK().getIdProducto());
             detalle.setDescripcion(listadet.get(i).getDescripcion());
@@ -225,87 +225,87 @@ public class crearOrdenCompraForm extends javax.swing.JDialog {
             detalle.setIce(BigDecimal.valueOf(0.00));
             detalle.setDescuento(BigDecimal.valueOf(0.00));
             detalle.setTotal(BigDecimal.valueOf(0.00));
-            
+
             listadetCompra.add(detalle);
         }
         Tablas.listarDetalleCompra(listadetCompra, jTable1);
-        
+
     }
-    
+
     public void calcularTotales() {
-        
+
         BigDecimal iva = new BigDecimal("0.12");////iva quemado
 
         BigDecimal TotalSubConIva = new BigDecimal("0.00");
         BigDecimal TotalSubSinIva = new BigDecimal("0.00");
         BigDecimal Total = new BigDecimal("0.00");
-        
+
         TotalSubTotal = new BigDecimal("0.00");
         TotalIva = new BigDecimal("0.00");
         TotalDescuento = new BigDecimal("0.00");
         TotalCompra = new BigDecimal("0.00");
-        
+
         for (int i = 0; i < listadetCompra.size(); i++) {
-            
+
             BigInteger Cant = listadetCompra.get(i).getCantidadRecibida();
             BigDecimal Cantidad = new BigDecimal(Cant);
             System.out.println("cantidad " + Cantidad);
             BigDecimal Precio = listadetCompra.get(i).getPrecioUnitario();
             System.out.println("Precio " + Precio);
-            
+
             BigDecimal Subtotal = Cantidad.multiply(Precio);
             System.out.println("Subtotal " + Subtotal);
             listadetCompra.get(i).setSubtotal(Subtotal);
-            
+
             BigDecimal Descuento = listadetCompra.get(i).getDescuento();
             System.out.println("descuento  " + Descuento);
             TotalDescuento = TotalDescuento.add(Descuento);
             listadetCompra.get(i).setDescuento(Descuento);
-            
+
             if (check[i]) {
-                
+
                 TotalIva = TotalIva.add(Subtotal.multiply(iva));
                 System.out.println("total iva " + TotalIva);
-                
+
                 listadetCompra.get(i).setIva(Subtotal.multiply(iva));
-                
+
                 TotalSubConIva = TotalSubConIva.add(Subtotal);
                 System.out.println("subtotal con iva " + TotalSubConIva);
-                
+
                 Total = Subtotal.add(Subtotal.multiply(iva)).subtract(Descuento);
-                
+
                 listadetCompra.get(i).setTotal(Total);
-                
+
             } else {
                 TotalSubSinIva = TotalSubSinIva.add(Subtotal);
                 System.out.println("TotalSub SinIva " + TotalSubSinIva);
                 listadetCompra.get(i).setIva(BigDecimal.valueOf(0.00));
-                
+
                 Total = Subtotal.subtract(Descuento);
-                
+
                 listadetCompra.get(i).setTotal(Total);
-                
+
             }
-            
+
             TotalCompra = TotalCompra.add(Total);
-            
+
         }
-        
+
         TotalSubTotal = TotalSubConIva.add(TotalSubSinIva);
         System.out.println("total totalsubtotal " + TotalSubTotal);
         System.out.println("total iva " + TotalIva);
         System.out.println("total descuento " + TotalDescuento);
         System.out.println("total compra " + TotalCompra);
-        
+
         txtSubtotal.setText(String.format("%.2f", TotalSubTotal));
         txtDescuento.setText(String.format("%.2f", TotalDescuento));
         txtIva.setText(String.format("%.2f", TotalIva));
         txtTotal.setText(String.format("%.2f", TotalCompra));
-        
+
         Tablas.listarDetalleCompra(listadetCompra, jTable1);
-        
+
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -569,7 +569,7 @@ public class crearOrdenCompraForm extends javax.swing.JDialog {
         BtnAprovar.setFont(new java.awt.Font("Ubuntu", 1, 10)); // NOI18N
         BtnAprovar.setForeground(new java.awt.Color(1, 1, 1));
         BtnAprovar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/aceptar_Mesa de trabajo 1.jpg"))); // NOI18N
-        BtnAprovar.setText("APROBAR");
+        BtnAprovar.setText("APROBAR Y CONTINUAR");
         BtnAprovar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnAprovarActionPerformed(evt);
@@ -672,8 +672,8 @@ public class crearOrdenCompraForm extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(BtnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(BtnAprovar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addComponent(BtnAprovar)
                 .addGap(27, 27, 27)
                 .addComponent(BtnAnular, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(139, 139, 139))
@@ -722,15 +722,15 @@ public class crearOrdenCompraForm extends javax.swing.JDialog {
 
     private void BtnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCancelarActionPerformed
         int r = JOptionPane.showConfirmDialog(null, "¿Desea Regresar?", "", JOptionPane.YES_NO_OPTION);
-        
+
         if (r == JOptionPane.YES_OPTION) {
             setVisible(false);
-            
+
         } else {
-            
+
         }
     }//GEN-LAST:event_BtnCancelarActionPerformed
-    
+
 
     private void jTable1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyTyped
         char car = evt.getKeyChar();
@@ -740,49 +740,49 @@ public class crearOrdenCompraForm extends javax.swing.JDialog {
     }//GEN-LAST:event_jTable1KeyTyped
 
     private void jTable1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyReleased
-        
+
         try {
-            
+
             int i = jTable1.getSelectedRow();
-            
+
             int col = jTable1.getSelectedColumn();
-            
+
             if (col == 4) {
                 String valor = (String) jTable1.getValueAt(i, 4);
-                
+
                 BigDecimal valor1 = new BigDecimal(valor);
-                
+
                 for (int j = 0; j < listadetCompra.size(); j++) {
-                    
+
                     if (j == i) {
-                        
+
                         listadetCompra.get(j).setPrecioUnitario(valor1);
                     }
-                    
+
                 }
                 calcularTotales();
-                
+
             }
-            
+
             if (col == 7) {
                 String valor = (String) jTable1.getValueAt(i, 7);
-                
+
                 BigDecimal valor1 = new BigDecimal(valor);
-                
+
                 for (int j = 0; j < listadetCompra.size(); j++) {
-                    
+
                     if (j == i) {
-                        if(valor1.doubleValue() < listadetCompra.get(j).getTotal().doubleValue()){
-                        listadetCompra.get(j).setDescuento(valor1);
-                      }  
-                    }else{
-                        JOptionPane.showMessageDialog(null,"Valor incorrecto");
+                        if (valor1.doubleValue() < listadetCompra.get(j).getTotal().doubleValue()) {
+                            listadetCompra.get(j).setDescuento(valor1);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Valor incorrecto");
                     }
-                    
+
                 }
                 calcularTotales();
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -791,17 +791,17 @@ public class crearOrdenCompraForm extends javax.swing.JDialog {
 
     private void BtnAprovarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAprovarActionPerformed
         int r = JOptionPane.showConfirmDialog(null, "¿Esta seguro de guardar los datos?", "", JOptionPane.YES_NO_OPTION);
-        
+
         InTipoMovimiento Movimiento = ObtenerDTO.ObtenerInTipoMovimiento("COMPRAS");
         InMotivos Motivos = ObtenerDTO.ObtenerInMotivos("COMPRAS");
         InTipoDocumento Documento = ObtenerDTO.ObtenerInTipoDocumento(cabOrden.getIdDocumento().intValue());
         CoProveedores Proveedor = ObtenerDTO.ObtenerCoProveedores(cabOrden.getIdProveedor().intValue());
-        
+
         CoOrdenCompras pkCompra = null;
         InMovimientos pkMovimiento = null;
-        
+
         int cont = 0;
-        
+
         if (r == JOptionPane.YES_OPTION) {
 
 //            if (cbx_movimiento.getSelectedItem().toString().equals("--SELECCIONE--")) {
@@ -819,15 +819,15 @@ public class crearOrdenCompraForm extends javax.swing.JDialog {
                 } else {
                     for (int i = 0; i < listadetCompra.size(); i++) {
                         System.out.println(" vvv " + cont);
-                        
+
                         if (listadetCompra.get(i).getPrecioUnitario().toString().equals("0.0")) {
                             cont = cont - 1;
                         } else {
                             cont = cont + 1;
                         }
-                        
+
                     }
-                    
+
                     if (listadetCompra.size() != cont) {
                         JOptionPane.showMessageDialog(null, "LLENE PRECIO!");
                     } else {
@@ -849,18 +849,18 @@ public class crearOrdenCompraForm extends javax.swing.JDialog {
                         cabCompra.setFormaPago(cbx_FormaPago.getSelectedItem().toString());
                         cabCompra.setUsuarioCreacion(seUsuario.getUsuario());
                         cabCompra.setFechaCreacion(d);
-                        
+
                         cabCompra.setTotalSubtotal(TotalSubTotal);
                         cabCompra.setTotalIva(TotalIva);
                         cabCompra.setTotalIce(BigDecimal.valueOf(0));
                         cabCompra.setTotalDescuento(TotalDescuento);
                         cabCompra.setTotalCompra(TotalCompra);
-                        
+
                         try {
-                            
+
                             pkCompra = obtenerIdCompra.guardarPedido(cabCompra);
                             System.out.println(" IDcabedcera compra " + pkCompra);
-                            
+
                             for (int i = 0; i < listadetCompra.size(); i++) {
                                 ////setear el pk detalle con compras
                                 detCompra.setCoOrdenCompras(pkCompra);
@@ -869,35 +869,35 @@ public class crearOrdenCompraForm extends javax.swing.JDialog {
                                 detCompra.getCoDetalleOrdenCompraPK().setIdProducto(listadetCompra.get(i).getCoDetalleOrdenCompraPK().getIdProducto());
                                 detCompra.getCoDetalleOrdenCompraPK().setLineaDetalle(listadetCompra.get(i).getCoDetalleOrdenCompraPK().getLineaDetalle());
                                 detCompra.setDescripcion(listadetCompra.get(i).getDescripcion());
-                                
+
                                 detCompra.setCantidadRecibida(listadetCompra.get(i).getCantidadRecibida());
                                 detCompra.setEstado("A");
-                                
+
                                 detCompra.setPrecioUnitario(listadetCompra.get(i).getPrecioUnitario());
                                 detCompra.setIce(BigDecimal.valueOf(0));
                                 detCompra.setIva(listadetCompra.get(i).getIva());
                                 detCompra.setDescuento(listadetCompra.get(i).getDescuento());
                                 detCompra.setSubtotal(listadetCompra.get(i).getSubtotal());
                                 detCompra.setTotal(listadetCompra.get(i).getTotal());
-                                
+
                                 detCompra.setUsuarioCreacion(seUsuario.getUsuario());
                                 detCompra.setFechaCreacion(d);
-                                
+
                                 detCompraController.create(detCompra);
                             }
                             /////////// actualizar la cab de la orden de pedido
                             CoOrdenPedidoJpaController cabOrdenController = new CoOrdenPedidoJpaController(EntityManagerUtil.ObtenerEntityManager());
-                            
+
                             cabOrden.setEstado("C");
                             cabOrden.setUsuarioActualizacion(seUsuario.getUsuario());
                             cabOrden.setFechaActualizacion(d);
-                            
+
                             cabOrdenController.edit(cabOrden);
-                            
+
                         } catch (Exception e) {
-                            
+
                             e.printStackTrace();
-                            
+
                         }
 
                         /////////// AGREGAR AL MOVIMIENTO
@@ -905,7 +905,7 @@ public class crearOrdenCompraForm extends javax.swing.JDialog {
                         InDetalleMovimientoJpaController detMovController = new InDetalleMovimientoJpaController(EntityManagerUtil.ObtenerEntityManager());
                         InMovimientos cabMovimiento = new InMovimientos();
                         InDetalleMovimiento detMovimiento = new InDetalleMovimiento();
-                        
+
                         try {
 
                             ////////////setear para la pk cab movimientos
@@ -921,13 +921,13 @@ public class crearOrdenCompraForm extends javax.swing.JDialog {
                             cabMovimiento.setIdProveedor(Proveedor);
                             cabMovimiento.setIdOrdenCompra(BigInteger.valueOf(pkCompra.getCoOrdenComprasPK().getIdOrdenCompra()));
                             cabMovimiento.setEstado("P");
-                            
+
                             cabMovimiento.setUsuarioCreacion(seUsuario.getUsuario());
                             cabMovimiento.setFechaCreacion(d);
-                            
+
                             pkMovimiento = obtenerIdMovimiento.guardarPedido(cabMovimiento);
                             System.out.println(" IDcabedcera movimiento" + pkMovimiento);
-                            
+
                             for (int i = 0; i < listadetCompra.size(); i++) {
                                 ////////////setear para la pk detalle con cab movimiento
                                 detMovimiento.setInMovimientos(pkMovimiento);
@@ -935,41 +935,43 @@ public class crearOrdenCompraForm extends javax.swing.JDialog {
                                 detMovimiento.setInDetalleMovimientoPK(new InDetalleMovimientoPK()); // inicializar pk
                                 detMovimiento.getInDetalleMovimientoPK().setLineaDetalle(listadetCompra.get(i).getCoDetalleOrdenCompraPK().getLineaDetalle());
                                 detMovimiento.getInDetalleMovimientoPK().setIdProducto(listadetCompra.get(i).getCoDetalleOrdenCompraPK().getIdProducto());
-                                
+
                                 detMovimiento.setDescripcion(listadetCompra.get(i).getDescripcion());
                                 detMovimiento.setCantidad(listadetCompra.get(i).getCantidadRecibida());
                                 detMovimiento.setPrecioUnitario(listadetCompra.get(i).getPrecioUnitario());
                                 detMovimiento.setEstado("A");
-                                
+
                                 detMovimiento.setUsuarioCreacion(seUsuario.getUsuario());
                                 detMovimiento.setFechaCreacion(d);
-                                
+
                                 detMovController.create(detMovimiento);
-                                
+
                             }
-                            
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                         JOptionPane.showMessageDialog(null, "Datos guardados correctamente!");
-                        setVisible(false);
+                        this.setVisible(false);
+                        seleccionarOrdenCompraRecibidoForm aprobarOrden = new seleccionarOrdenCompraRecibidoForm(new javax.swing.JFrame(), true, seUsuario, seEmpresa, seSucursal);
+                        aprobarOrden.setVisible(true);
 
 //                            }
 //
 //                        }
                     }
                 }
-                
+
             }
         }
     }//GEN-LAST:event_BtnAprovarActionPerformed
 
     private void BtnAnularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAnularActionPerformed
-        
+
         int r = JOptionPane.showConfirmDialog(null, "¿Esta seguro de anular los datos?", "", JOptionPane.YES_NO_OPTION);
-        
+
         CoOrdenCompras pkCompra = null;
-        
+
         if (r == JOptionPane.YES_OPTION) {
 
             /////////// AGREGAR AL ORDEN DE COMPRA
@@ -986,21 +988,21 @@ public class crearOrdenCompraForm extends javax.swing.JDialog {
             cabCompra.setIdTipoDocumento(cabOrden.getIdDocumento());
             cabCompra.setEstado("I");
             cabCompra.setFechaEntrega(fecha);
-            
+
             cabCompra.setUsuarioCreacion(seUsuario.getUsuario());
             cabCompra.setFechaCreacion(d);
-            
+
             cabCompra.setTotalSubtotal(TotalSubTotal);
             cabCompra.setTotalIva(TotalIva);
             cabCompra.setTotalIce(BigDecimal.valueOf(0));
             cabCompra.setTotalDescuento(TotalDescuento);
             cabCompra.setTotalCompra(TotalCompra);
-            
+
             try {
-                
+
                 pkCompra = obtenerIdCompra.guardarPedido(cabCompra);
                 System.out.println(" IDcabedcera compra " + pkCompra);
-                
+
                 for (int i = 0; i < listadetCompra.size(); i++) {
                     ////setear el pk detalle con compras
                     detCompra.setCoOrdenCompras(pkCompra);
@@ -1009,89 +1011,89 @@ public class crearOrdenCompraForm extends javax.swing.JDialog {
                     detCompra.getCoDetalleOrdenCompraPK().setIdProducto(listadetCompra.get(i).getCoDetalleOrdenCompraPK().getIdProducto());
                     detCompra.getCoDetalleOrdenCompraPK().setLineaDetalle(listadetCompra.get(i).getCoDetalleOrdenCompraPK().getLineaDetalle());
                     detCompra.setDescripcion(listadetCompra.get(i).getDescripcion());
-                    
+
                     detCompra.setCantidadRecibida(listadetCompra.get(i).getCantidadRecibida());
                     detCompra.setEstado("I");
-                    
+
                     detCompra.setPrecioUnitario(listadetCompra.get(i).getPrecioUnitario());
                     detCompra.setIce(BigDecimal.valueOf(0));
                     detCompra.setIva(listadetCompra.get(i).getIva());
                     detCompra.setDescuento(listadetCompra.get(i).getDescuento());
                     detCompra.setSubtotal(listadetCompra.get(i).getSubtotal());
                     detCompra.setTotal(listadetCompra.get(i).getTotal());
-                    
+
                     detCompra.setUsuarioCreacion(seUsuario.getUsuario());
                     detCompra.setFechaCreacion(d);
-                    
+
                     detCompraController.create(detCompra);
                 }
                 /////////// actualizar la cab de la orden de pedido
                 CoOrdenPedidoJpaController cabOrdenController = new CoOrdenPedidoJpaController(EntityManagerUtil.ObtenerEntityManager());
-                
+
                 cabOrden.setEstado("I");
                 cabOrden.setUsuarioActualizacion(seUsuario.getUsuario());
                 cabOrden.setFechaActualizacion(d);
-                
+
                 cabOrdenController.edit(cabOrden);
-                
+
             } catch (Exception e) {
-                
+
                 e.printStackTrace();
-                
+
             }
-            
+
             JOptionPane.showMessageDialog(null, "Datos guardados correctamente!");
             setVisible(false);
-            
+
         }
-        
+
 
     }//GEN-LAST:event_BtnAnularActionPerformed
 
     private void jTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MousePressed
-        
+
         int row = jTable1.rowAtPoint(evt.getPoint());
         int col = jTable1.columnAtPoint(evt.getPoint());
-        
+
         if (evt.getClickCount() == 1) {
             if (col == 6) {
                 JCheckBox chbox = (JCheckBox) jTable1.getValueAt(row, col);
-                
+
                 boolean selected = chbox.isSelected();
-                
+
                 if (selected) {
-                    
+
                     chbox.setSelected(false);
-                    
+
                     ivaBoolean = false;
                     check[row] = ivaBoolean;
                     calcularTotales();
-                    
+
                 } else {
-                    
+
                     chbox.setSelected(true);
-                    
+
                     ivaBoolean = true;
                     check[row] = ivaBoolean;
                     calcularTotales();
                 }
-                
+
             }
         }
-        
+
 
     }//GEN-LAST:event_jTable1MousePressed
 
     private void txtFechaEntregaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtFechaEntregaMousePressed
-        
+
         Calendario fechaEntrega = new Calendario(new javax.swing.JFrame(), true);
         fechaEntrega.setVisible(true);
-        
+
         fecha = fechaEntrega.getFecha();
-        
+
         SimpleDateFormat formatoFecha = new SimpleDateFormat("YYYY-MM-dd");
         txtFechaEntrega.setText(String.format(formatoFecha.format(fecha)));
-        
+
 
     }//GEN-LAST:event_txtFechaEntregaMousePressed
 
@@ -1109,21 +1111,21 @@ public class crearOrdenCompraForm extends javax.swing.JDialog {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                    
+
                 }
             }
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(crearOrdenCompraForm.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(crearOrdenCompraForm.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(crearOrdenCompraForm.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(crearOrdenCompraForm.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);

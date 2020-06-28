@@ -13,6 +13,7 @@ import ec.com.asofar.dto.SeUsuarios;
 import ec.com.asofar.util.ClaseReporte;
 import ec.com.asofar.util.EntityManagerUtil;
 import ec.com.asofar.util.Tablas;
+import ec.com.asofar.views.DetallesTarifa.CargarTarifario;
 import java.awt.Dimension;
 import java.awt.MouseInfo;
 import java.awt.Point;
@@ -85,6 +86,7 @@ public class ConsultaPrestacionesporServicio extends javax.swing.JDialog {
         tba_prestacionesporservicios = new javax.swing.JTable();
         jsalir = new javax.swing.JButton();
         btnimprimir = new javax.swing.JButton();
+        agregar1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -191,6 +193,17 @@ public class ConsultaPrestacionesporServicio extends javax.swing.JDialog {
             }
         });
 
+        agregar1.setBackground(new java.awt.Color(254, 254, 254));
+        agregar1.setFont(new java.awt.Font("Ubuntu", 1, 10)); // NOI18N
+        agregar1.setForeground(new java.awt.Color(1, 1, 1));
+        agregar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/nuevo_Mesa de trabajo 1.png"))); // NOI18N
+        agregar1.setText("CONTINUAR");
+        agregar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                agregar1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -211,9 +224,11 @@ public class ConsultaPrestacionesporServicio extends javax.swing.JDialog {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(98, 98, 98)
                                 .addComponent(jsalir, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(119, 119, 119)
+                                .addGap(82, 82, 82)
                                 .addComponent(agregar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(106, 106, 106)
+                                .addGap(13, 13, 13)
+                                .addComponent(agregar1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnimprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -230,10 +245,12 @@ public class ConsultaPrestacionesporServicio extends javax.swing.JDialog {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jsalir, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(agregar, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnimprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jsalir, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(agregar, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnimprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(agregar1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(15, 15, 15))
         );
 
@@ -345,6 +362,12 @@ public class ConsultaPrestacionesporServicio extends javax.swing.JDialog {
 
 
     }//GEN-LAST:event_tba_prestacionesporserviciosMousePressed
+
+    private void agregar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregar1ActionPerformed
+        this.setVisible(false);
+        CargarTarifario ct = new CargarTarifario(new javax.swing.JFrame(), true, usu, emp, suc);
+        ct.setVisible(true);
+    }//GEN-LAST:event_agregar1ActionPerformed
     private void txtfiltroKeyTyped(java.awt.event.KeyEvent evt) {
         char c = evt.getKeyChar();
         if (Character.isSpaceChar(c)) {
@@ -391,6 +414,7 @@ public class ConsultaPrestacionesporServicio extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton agregar;
+    private javax.swing.JButton agregar1;
     private javax.swing.JButton btnimprimir;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;

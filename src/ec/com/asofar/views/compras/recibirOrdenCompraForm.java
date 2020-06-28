@@ -488,7 +488,7 @@ public class recibirOrdenCompraForm extends javax.swing.JDialog {
         BtnAprovar.setFont(new java.awt.Font("Ubuntu", 1, 10)); // NOI18N
         BtnAprovar.setForeground(new java.awt.Color(1, 1, 1));
         BtnAprovar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/aceptar_Mesa de trabajo 1.jpg"))); // NOI18N
-        BtnAprovar.setText("APROBAR");
+        BtnAprovar.setText("APROBAR Y FINALIZAR");
         BtnAprovar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnAprovarActionPerformed(evt);
@@ -509,8 +509,8 @@ public class recibirOrdenCompraForm extends javax.swing.JDialog {
                         .addGap(52, 52, 52)
                         .addComponent(BtnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(BtnAprovar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(51, 51, 51)))
+                        .addComponent(BtnAprovar)
+                        .addGap(20, 20, 20)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(

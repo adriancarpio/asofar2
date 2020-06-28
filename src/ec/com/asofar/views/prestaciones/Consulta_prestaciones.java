@@ -12,6 +12,7 @@ import ec.com.asofar.dto.SeSucursal;
 import ec.com.asofar.dto.SeUsuarios;
 import ec.com.asofar.util.EntityManagerUtil;
 import ec.com.asofar.util.Tablas;
+import ec.com.asofar.views.prestacionesporservicios.ConsultaPrestacionesporServicio;
 import java.util.List;
 import java.util.Objects;
 
@@ -85,6 +86,7 @@ public class Consulta_prestaciones extends javax.swing.JDialog {
         tblPrestacion = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         txtfiltro = new javax.swing.JTextField();
+        btnAgregar1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -169,6 +171,17 @@ public class Consulta_prestaciones extends javax.swing.JDialog {
             }
         });
 
+        btnAgregar1.setBackground(new java.awt.Color(254, 254, 254));
+        btnAgregar1.setFont(new java.awt.Font("Ubuntu", 1, 10)); // NOI18N
+        btnAgregar1.setForeground(new java.awt.Color(1, 1, 1));
+        btnAgregar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/agregar_Mesa de trabajo 1.png"))); // NOI18N
+        btnAgregar1.setText("CONTINUAR");
+        btnAgregar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregar1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -188,8 +201,10 @@ public class Consulta_prestaciones extends javax.swing.JDialog {
                 .addGap(56, 56, 56)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(79, 79, 79))
+                .addComponent(btnAgregar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnAgregar1)
+                .addGap(17, 17, 17))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -204,7 +219,8 @@ public class Consulta_prestaciones extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAgregar1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -221,15 +237,6 @@ public class Consulta_prestaciones extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        AgregarPrestacion agre = new AgregarPrestacion(new javax.swing.JFrame(), true, usu, emp, suc);
-        agre.setVisible(true);
-        prestacion = pr.findPrPrestacionesEntities();
-        Tablas.TablaPrestaciones(prestacion, tblPrestacion);
-
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnAgregarActionPerformed
     public PrPrestaciones devuelvePrestaciones(Long id, List<PrPrestaciones> listapre) {
         PrPrestaciones doc = null;
         for (int i = 0; i < listapre.size(); i++) {
@@ -283,6 +290,21 @@ public class Consulta_prestaciones extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtfiltroActionPerformed
 
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        AgregarPrestacion agre = new AgregarPrestacion(new javax.swing.JFrame(), true, usu, emp, suc);
+        agre.setVisible(true);
+        prestacion = pr.findPrPrestacionesEntities();
+        Tablas.TablaPrestaciones(prestacion, tblPrestacion);
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnAgregar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregar1ActionPerformed
+        this.setVisible(false);
+        ConsultaPrestacionesporServicio cps = new ConsultaPrestacionesporServicio(new javax.swing.JFrame(),true,usu, emp, suc);
+        cps.setVisible(true);
+    }//GEN-LAST:event_btnAgregar1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -327,6 +349,7 @@ public class Consulta_prestaciones extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnAgregar1;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

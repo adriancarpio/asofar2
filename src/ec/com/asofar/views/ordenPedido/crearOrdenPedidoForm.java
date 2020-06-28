@@ -306,7 +306,7 @@ public class crearOrdenPedidoForm extends javax.swing.JDialog {
         jButton2.setFont(new java.awt.Font("Ubuntu", 1, 10)); // NOI18N
         jButton2.setForeground(new java.awt.Color(1, 1, 1));
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/GUARDAR_Mesa de trabajo 1.png"))); // NOI18N
-        jButton2.setText("GUARDAR");
+        jButton2.setText("GUARDAR Y CONTINUAR");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -374,8 +374,8 @@ public class crearOrdenPedidoForm extends javax.swing.JDialog {
                         .addGap(101, 101, 101)
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(121, 121, 121))
+                        .addComponent(jButton2)
+                        .addGap(60, 60, 60))
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -528,7 +528,9 @@ public class crearOrdenPedidoForm extends javax.swing.JDialog {
                             }
 
                             JOptionPane.showMessageDialog(null, "GUARDADO EXITOSAMENTE");
-                            setVisible(false);                           
+                            this.setVisible(false);
+                            aprobarOrdendePedidoForm aprobarOrden = new aprobarOrdendePedidoForm(new javax.swing.JFrame(), true, seUsuario, seEmpresa, seSucursal);
+                            aprobarOrden.setVisible(true);
                             
                         } catch (Exception ex) {
                             Logger.getLogger(crearOrdenPedidoForm.class.getName()).log(Level.SEVERE, null, ex);
