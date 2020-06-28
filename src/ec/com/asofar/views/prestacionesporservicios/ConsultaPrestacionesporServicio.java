@@ -186,6 +186,7 @@ public class ConsultaPrestacionesporServicio extends javax.swing.JDialog {
         btnimprimir.setBackground(new java.awt.Color(254, 254, 254));
         btnimprimir.setFont(new java.awt.Font("Ubuntu", 1, 10)); // NOI18N
         btnimprimir.setForeground(new java.awt.Color(1, 1, 1));
+        btnimprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/imprimir_mesa.png"))); // NOI18N
         btnimprimir.setText("IMPRIMIR");
         btnimprimir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -196,7 +197,7 @@ public class ConsultaPrestacionesporServicio extends javax.swing.JDialog {
         agregar1.setBackground(new java.awt.Color(254, 254, 254));
         agregar1.setFont(new java.awt.Font("Ubuntu", 1, 10)); // NOI18N
         agregar1.setForeground(new java.awt.Color(1, 1, 1));
-        agregar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/nuevo_Mesa de trabajo 1.png"))); // NOI18N
+        agregar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/next.png"))); // NOI18N
         agregar1.setText("CONTINUAR");
         agregar1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

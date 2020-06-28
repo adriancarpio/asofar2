@@ -174,7 +174,7 @@ public class Consulta_prestaciones extends javax.swing.JDialog {
         btnAgregar1.setBackground(new java.awt.Color(254, 254, 254));
         btnAgregar1.setFont(new java.awt.Font("Ubuntu", 1, 10)); // NOI18N
         btnAgregar1.setForeground(new java.awt.Color(1, 1, 1));
-        btnAgregar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/agregar_Mesa de trabajo 1.png"))); // NOI18N
+        btnAgregar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/next.png"))); // NOI18N
         btnAgregar1.setText("CONTINUAR");
         btnAgregar1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
