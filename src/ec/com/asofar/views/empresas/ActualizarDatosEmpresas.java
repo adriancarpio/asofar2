@@ -132,6 +132,7 @@ public class ActualizarDatosEmpresas extends javax.swing.JDialog {
         btnGuardar.setBackground(new java.awt.Color(254, 254, 254));
         btnGuardar.setFont(new java.awt.Font("Ubuntu", 1, 10)); // NOI18N
         btnGuardar.setForeground(new java.awt.Color(1, 1, 1));
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/GUARDAR_Mesa de trabajo 1.png"))); // NOI18N
         btnGuardar.setText("ACTUALIZAR");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -271,7 +271,7 @@ public class Apertura_Caja1 extends javax.swing.JDialog {
 //            if (caja.getSelectedIndex() == 0) {
 //                JOptionPane.showMessageDialog(null, "SELECCIONE UNA OPCION VALIDA", "ACCION NO PERMITIDA!", JOptionPane.ERROR_MESSAGE);
 //            } else {
-                if (" ".equals(txtMonto.getText())) {
+                if (txtMonto.getText().equals("")) {
                     JOptionPane.showMessageDialog(null, "INGRESE UN DATO VALIDO", "ACCION NO PERMITIDA!", JOptionPane.ERROR_MESSAGE);
                 } else {
                     VeDetalleCaja dc = new VeDetalleCaja();
