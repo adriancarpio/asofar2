@@ -349,7 +349,7 @@ public class Cierre_Caja extends javax.swing.JDialog {
 
     private void btnGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrabarActionPerformed
         String Cadena = "";
-        if (" ".equals(montocierre.getText())) {
+        if (montocierre.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "INGRESE UN DATO VALIDO", "ACCION NO PERMITIDA!", JOptionPane.ERROR_MESSAGE);
         } else {
             try {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <facturaOrden>
-    <facturaCabecera IdFactura="10">
+    <facturaCabecera IdFactura="4">
         <empresa>ASOFAR</empresa>
         <sucursal>MADRID</sucursal>
-        <fecha>2020-06-25T16:17:16.822-05:00</fecha>
+        <fecha>2020-06-29T11:06:20.694-05:00</fecha>
         <formaPago>CONTADO</formaPago>
         <despachado>SI</despachado>
         <caja>caja admin</caja>
@@ -13,22 +13,22 @@
         <clienteTelefono>***********************</clienteTelefono>
         <clienteCorreo>***********************</clienteCorreo>
         <clienteDireccion>***********************</clienteDireccion>
-        <totalSubtotal>14.399999999999999</totalSubtotal>
-        <totalDescuento>1.6800000000000002</totalDescuento>
-        <totalIva>1.7279999999999998</totalIva>
-        <totalFacturado>14.448</totalFacturado>
+        <totalSubtotal>3.5</totalSubtotal>
+        <totalDescuento>0.0</totalDescuento>
+        <totalIva>0.42</totalIva>
+        <totalFacturado>3.92</totalFacturado>
     </facturaCabecera>
     <facturaDetalle>
-        <detalle IdFacturaDetalle="11">
+        <detalle IdFacturaDetalle="4">
             <lineaDetalle>1</lineaDetalle>
             <idProducto>2</idProducto>
             <descripcion>ANALGESICO, ANTIINFLAMATORIO  PROBINEX EN COMPRIMIDOS CAJA X 20 DE 600MG</descripcion>
-            <cantidad>24</cantidad>
-            <precioUnitario>0.6</precioUnitario>
-            <subtotal>14.4</subtotal>
-            <valorIva>1.728</valorIva>
-            <valorDescuento>1.68</valorDescuento>
-            <valorTotal>14.448</valorTotal>
+            <cantidad>1</cantidad>
+            <precioUnitario>3.5</precioUnitario>
+            <subtotal>3.5</subtotal>
+            <valorIva>0.42</valorIva>
+            <valorDescuento>0.0</valorDescuento>
+            <valorTotal>3.92</valorTotal>
         </detalle>
     </facturaDetalle>
 </facturaOrden>
