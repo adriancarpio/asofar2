@@ -16,6 +16,12 @@ import ec.com.asofar.dto.SeUsuarios;
 import ec.com.asofar.util.EntityManagerUtil;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -229,8 +235,68 @@ public class SelectEmpresaSucursal extends javax.swing.JDialog {
         PantallaPrincipal pp = new PantallaPrincipal(us, em, su);
         setVisible(false);
         pp.setVisible(true);
+        respaldar();
     }//GEN-LAST:event_jButton1ActionPerformed
+    
+    private void respaldar() {
+        try {
+            
+             Date myDate = new Date();
+             String nombre = ("asofar" + new SimpleDateFormat("-dd-MM-yyyy").format(myDate)+".sql");
 
+//Aquí obtienes el formato que deseas
+            System.out.println(new SimpleDateFormat("dd/MM/yyyy").format(myDate));
+            /* - Datos de acceso a nuestra base de datos */
+            /* Usa localhost si el servidor corre en la misma maquina, de lo 
+            contrario utiliza la IP o dirección del sevidor*/
+            String dbServer = "localhost";
+            /* El usuario de tu base de datos*/
+            String dbName = "dbsistema";
+            /* El usuario de tu base de datos*/
+            String dbUser = "root";
+            /* La contraseña de la base de datos (dejarla en texto plano puede 
+            ser un problema)*/
+            String dbPass = "";
+            
+            /*El nombre o ruta a donde se guardara el archivo de volcado .sql*/
+            String sqlFile = "C:\\Users\\adria\\Documents\\dumps" + nombre;
+
+            /* La linea de comando completa que ejecutara el programa*/
+            String command = "bin/mysqldump "+"-h"+dbServer+" -u" + dbUser
+                    + " -p" + dbPass + " " + dbName + " -r " + sqlFile;
+
+            /*Se crea un proceso que ejecuta el comando dado*/
+            Process bck = Runtime.getRuntime().exec(command);
+            
+            /* Obtiene el flujo de datos del proceso, esto se hace para obtener 
+            el texto del proceso*/
+            InputStream stdout = bck.getErrorStream();
+            
+            /* Se obtiene el resultado de finalizacion del proceso*/
+            int resultado1 = bck.waitFor();
+
+            
+            String line;
+
+            /* Se crea un buffer de lectura con el flujo de datos outstd y ese mismo
+            sera leido e impreso, esto mostrara el texto que muestre el programa
+            mysqldump, de esta forma sabra cual es el error en su comando*/
+            BufferedReader brCleanUp
+                    = new BufferedReader(new InputStreamReader(stdout));
+            while ((line = brCleanUp.readLine()) != null) {
+                System.out.println(line);
+            }
+            brCleanUp.close();
+            
+            if (resultado1 == 0) {
+                System.out.println("Respaldo exitoso");
+            } else {
+                System.out.println("Error al respaldar");
+            }
+        } catch (IOException | InterruptedException ex) {
+            System.out.println("Exception: " + ex.getMessage());
+        }
+    }
     private void jLabel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MousePressed
         x = evt.getX();
         y = evt.getY();

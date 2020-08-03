@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <facturaOrden>
-    <facturaCabecera IdFactura="5">
+    <facturaCabecera IdFactura="6">
         <empresa>ASOFAR</empresa>
         <sucursal>MADRID</sucursal>
-        <fecha>2020-06-30T11:44:06.160-05:00</fecha>
+        <fecha>2020-07-05T16:06:13.414-05:00</fecha>
         <formaPago>CONTADO</formaPago>
         <despachado>SI</despachado>
         <caja>caja admin</caja>
@@ -13,33 +13,22 @@
         <clienteTelefono>***********************</clienteTelefono>
         <clienteCorreo>***********************</clienteCorreo>
         <clienteDireccion>***********************</clienteDireccion>
-        <totalSubtotal>34.8</totalSubtotal>
-        <totalDescuento>3.6</totalDescuento>
-        <totalIva>3.6</totalIva>
-        <totalFacturado>34.8</totalFacturado>
+        <totalSubtotal>12.0</totalSubtotal>
+        <totalDescuento>0.0</totalDescuento>
+        <totalIva>1.44</totalIva>
+        <totalFacturado>13.44</totalFacturado>
     </facturaCabecera>
     <facturaDetalle>
-        <detalle IdFacturaDetalle="5">
+        <detalle IdFacturaDetalle="7">
             <lineaDetalle>1</lineaDetalle>
-            <idProducto>2</idProducto>
-            <descripcion>ANALGESICO, ANTIINFLAMATORIO  PROBINEX EN COMPRIMIDOS CAJA X 20 DE 600MG</descripcion>
-            <cantidad>6</cantidad>
-            <precioUnitario>0.8</precioUnitario>
-            <subtotal>4.8</subtotal>
-            <valorIva>0.0</valorIva>
-            <valorDescuento>0.0</valorDescuento>
-            <valorTotal>4.8</valorTotal>
-        </detalle>
-        <detalle IdFacturaDetalle="6">
-            <lineaDetalle>2</lineaDetalle>
             <idProducto>1</idProducto>
             <descripcion>GENERAL  GENFARGRIP DIA EN CAJA X SOBRES X 24 DE 18G</descripcion>
-            <cantidad>4</cantidad>
-            <precioUnitario>7.5</precioUnitario>
-            <subtotal>30.0</subtotal>
-            <valorIva>3.6</valorIva>
-            <valorDescuento>3.6</valorDescuento>
-            <valorTotal>30.0</valorTotal>
+            <cantidad>20</cantidad>
+            <precioUnitario>0.6</precioUnitario>
+            <subtotal>12.0</subtotal>
+            <valorIva>1.44</valorIva>
+            <valorDescuento>0.0</valorDescuento>
+            <valorTotal>13.44</valorTotal>
         </detalle>
     </facturaDetalle>
 </facturaOrden>
