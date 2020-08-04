@@ -242,7 +242,7 @@ public class crearOrdenCompraForm extends javax.swing.JDialog {
 
         TotalSubTotal = new BigDecimal("0.00");
         TotalIva = new BigDecimal("0.00");
-        //TotalDescuento = new BigDecimal("0.00");
+        TotalDescuento = new BigDecimal("0.00");
         TotalCompra = new BigDecimal("0.00");
 
         for (int i = 0; i < listadetCompra.size(); i++) {

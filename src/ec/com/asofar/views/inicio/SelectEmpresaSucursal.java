@@ -251,7 +251,7 @@ public class SelectEmpresaSucursal extends javax.swing.JDialog {
             contrario utiliza la IP o dirección del sevidor*/
             String dbServer = "localhost";
             /* El usuario de tu base de datos*/
-            String dbName = "dbsistema";
+            String dbName = "bd_farmacia_desa";
             /* El usuario de tu base de datos*/
             String dbUser = "root";
             /* La contraseña de la base de datos (dejarla en texto plano puede 
@@ -263,7 +263,7 @@ public class SelectEmpresaSucursal extends javax.swing.JDialog {
 
             /* La linea de comando completa que ejecutara el programa*/
             String command = "bin/mysqldump "+"-h"+dbServer+" -u" + dbUser
-                    + " -p" + dbPass + " " + dbName + " -r " + sqlFile;
+                    + " -p" + dbPass + "" + dbName + " -r " + sqlFile;
 
             /*Se crea un proceso que ejecuta el comando dado*/
             Process bck = Runtime.getRuntime().exec(command);

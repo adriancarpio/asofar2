@@ -154,6 +154,11 @@ public class AgregarNuevoDetalle extends javax.swing.JDialog {
         });
 
         txt_porcentaje_descuento.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
+        txt_porcentaje_descuento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_porcentaje_descuentoActionPerformed(evt);
+            }
+        });
         txt_porcentaje_descuento.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txt_porcentaje_descuentoKeyReleased(evt);
@@ -162,6 +167,11 @@ public class AgregarNuevoDetalle extends javax.swing.JDialog {
 
         txtDescuent_valor.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         txtDescuent_valor.setMinimumSize(new java.awt.Dimension(6, 30));
+        txtDescuent_valor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDescuent_valorActionPerformed(evt);
+            }
+        });
 
         txt_valor_venta.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         txt_valor_venta.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -530,6 +540,14 @@ public class AgregarNuevoDetalle extends javax.swing.JDialog {
     private void txt_valor_ventaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_valor_ventaKeyReleased
         txt_porcentaje_descuento.setText("");
     }//GEN-LAST:event_txt_valor_ventaKeyReleased
+
+    private void txt_porcentaje_descuentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_porcentaje_descuentoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_porcentaje_descuentoActionPerformed
+
+    private void txtDescuent_valorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDescuent_valorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDescuent_valorActionPerformed
     public void cargar() {
         txtidtarifario.setText(String.valueOf(tp.getDescripcion()));
 //        emp1.setText(String.valueOf(tp.getPrTarifarioPK().getIdEmpresa()));
