@@ -344,7 +344,7 @@ public class ReporteriaInventario extends javax.swing.JDialog {
 
                 sheet.addMergedRegion(new CellRangeAddress(1, 2, 1, 1));
 
-                String[] cabecera = new String[]{"ID.PROD", "PRODUCTO", "BODEGA", "STOCKxUNIDAD", "EMPAQUExUNIDAD", "MIN", "MAX"};
+                String[] cabecera = new String[]{"ID.PROD", "PRODUCTO", "BODEGA", "STOCKxUNIDAD", "EMPAQUExUNIDAD"};
 
                 CellStyle headerStyle = book.createCellStyle();
                 headerStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
@@ -361,7 +361,7 @@ public class ReporteriaInventario extends javax.swing.JDialog {
                 font.setFontHeightInPoints((short) 12);
                 headerStyle.setFont(font);
 
-                Row filaEncabezados = sheet.createRow(6);
+                Row filaEncabezados = sheet.createRow(4);
 
                 for (int i = 0; i < cabecera.length; i++) {
                     Cell celdaEnzabezado = filaEncabezados.createCell(i);
@@ -374,7 +374,7 @@ public class ReporteriaInventario extends javax.swing.JDialog {
                 ResultSet rs;
                 Connection conn = con.getConexion();
 
-                int numFilaDatos = 7;
+                int numFilaDatos = 5;
 
                 CellStyle datosEstilo = book.createCellStyle();
                 datosEstilo.setBorderBottom(BorderStyle.THIN);
@@ -382,11 +382,11 @@ public class ReporteriaInventario extends javax.swing.JDialog {
                 datosEstilo.setBorderRight(BorderStyle.THIN);
                 datosEstilo.setBorderBottom(BorderStyle.THIN);
 
-                ps = conn.prepareStatement("SELECT cc.id_orden_compra,  td.nombre_documento, cc.fecha_entrega, cp.nombre, cc.total_subtotal,\n"
-                        + "cc.total_iva, cc.total_descuento, cc.total_compra\n"
-                        + "FROM co_orden_compras cc \n"
-                        + "left join in_tipo_documento td on cc.id_tipo_documento= td.id_tipo_documento\n"
-                        + "left join co_proveedores cp on cc.id_proveedor= cp.id_proveedor;");
+                ps = conn.prepareStatement("SELECT distinctrow(p.id_producto), p.nombre_producto, b.nombre_bodega, k.saldo_actual, \n"
+                        + "concat(p.unidad_empaque_compra,\" EMPAQUE\",\"/\",p.cantidad_por_empaque_compra,\" UNIDAD\")\n"
+                        + "FROM in_kardex k\n"
+                        + "left join pr_productos p on k.id_producto = p.id_producto\n"
+                        + "left join in_bodega b on k.id_bodega = b.id_bodega;");
                 rs = ps.executeQuery();
 
                 int numCol = rs.getMetaData().getColumnCount();
@@ -418,8 +418,6 @@ public class ReporteriaInventario extends javax.swing.JDialog {
                 sheet.autoSizeColumn(2);
                 sheet.autoSizeColumn(3);
                 sheet.autoSizeColumn(4);
-                sheet.autoSizeColumn(5);
-                sheet.autoSizeColumn(6);
 
                 sheet.setZoom(150);
 
