@@ -5,6 +5,7 @@
  */
 package ec.com.asofar.views.reporteria;
 
+import com.mysql.jdbc.Connection;
 import com.toedter.calendar.JCalendar;
 import ec.com.asofar.daoext.ReporteComprasDTO;
 import ec.com.asofar.daoext.ReporteriaExt;
@@ -12,6 +13,7 @@ import ec.com.asofar.dto.SeEmpresa;
 import ec.com.asofar.dto.SeSucursal;
 import ec.com.asofar.dto.SeUsuarios;
 import ec.com.asofar.util.ClaseReporte;
+import ec.com.asofar.util.Conexion;
 import ec.com.asofar.util.Tablas;
 import java.awt.AWTKeyStroke;
 import java.awt.Dimension;
@@ -20,6 +22,14 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -35,6 +45,24 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.swing.JRViewer;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Drawing;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Picture;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.util.IOUtils;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -56,7 +84,7 @@ public class ReporteriaCompras extends javax.swing.JDialog {
     List<ReporteComprasDTO> itemList = null;
 
     public ReporteriaCompras(java.awt.Frame parent, boolean modal) {
-        super(parent, modal=false);
+        super(parent, modal = false);
         initComponents();
         this.setLocationRelativeTo(this);
         itemList = rep.reporteCompras();
@@ -68,7 +96,7 @@ public class ReporteriaCompras extends javax.swing.JDialog {
     }
 
     public ReporteriaCompras(java.awt.Frame parent, boolean modal, SeUsuarios us, SeEmpresa em, SeSucursal su) {
-        super(parent, modal=false);
+        super(parent, modal = false);
         setUndecorated(true);
         initComponents();
         this.setLocationRelativeTo(this);
@@ -197,6 +225,7 @@ public class ReporteriaCompras extends javax.swing.JDialog {
         jLabel5 = new javax.swing.JLabel();
         txtDescuentlo = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -340,6 +369,17 @@ public class ReporteriaCompras extends javax.swing.JDialog {
         jLabel6.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
         jLabel6.setText("TOTAL DESCUENTO:");
 
+        jButton3.setBackground(new java.awt.Color(254, 254, 254));
+        jButton3.setFont(new java.awt.Font("Ubuntu", 1, 10)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(1, 1, 1));
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/excel.png"))); // NOI18N
+        jButton3.setText("  EXCEL");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -378,7 +418,9 @@ public class ReporteriaCompras extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(200, 200, 200)
                         .addComponent(btnSalir2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(147, 147, 147)
+                        .addGap(17, 17, 17)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -413,7 +455,8 @@ public class ReporteriaCompras extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSalir2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSalir2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -475,47 +518,43 @@ public class ReporteriaCompras extends javax.swing.JDialog {
         String dia = Integer.toString(Chooser1.getCalendar().get(Calendar.DAY_OF_MONTH));
         String mes = Integer.toString(Chooser1.getCalendar().get(Calendar.MONTH));
         String año = Integer.toString(Chooser1.getCalendar().get(Calendar.YEAR));
-        String fecha = (dia+"-"+mes+"-"+año);
+        String fecha = (dia + "-" + mes + "-" + año);
         String dia2 = Integer.toString(Chooser2.getCalendar().get(Calendar.DAY_OF_MONTH));
         String mes2 = Integer.toString(Chooser2.getCalendar().get(Calendar.MONTH));
         String año2 = Integer.toString(Chooser2.getCalendar().get(Calendar.YEAR));
-        String fecha2 = (dia2+"-"+mes2+"-"+año2);
+        String fecha2 = (dia2 + "-" + mes2 + "-" + año2);
         ArrayList lista = new ArrayList();
-        
+
         for (int i = 0; i < tbaReporteCompra.getRowCount(); i++) {
             ClaseReporte creporte = new ClaseReporte(fecha,
-                                                    fecha2,
-                                                    tbaReporteCompra.getValueAt(i,0).toString(),
-                                                    tbaReporteCompra.getValueAt(i,1).toString(),
-                                                    tbaReporteCompra.getValueAt(i,2).toString(),
-                                                    tbaReporteCompra.getValueAt(i,3).toString(),
-                                                    tbaReporteCompra.getValueAt(i,4).toString(),
-                                                    tbaReporteCompra.getValueAt(i,5).toString(),
-                                                    tbaReporteCompra.getValueAt(i,6).toString(),
-                                                    tbaReporteCompra.getValueAt(i,7).toString(),
-                                                    txtDescuentlo.getText(),Txt_iva.getText(),Txt_Total.getText());
+                    fecha2,
+                    tbaReporteCompra.getValueAt(i, 0).toString(),
+                    tbaReporteCompra.getValueAt(i, 1).toString(),
+                    tbaReporteCompra.getValueAt(i, 2).toString(),
+                    tbaReporteCompra.getValueAt(i, 3).toString(),
+                    tbaReporteCompra.getValueAt(i, 4).toString(),
+                    tbaReporteCompra.getValueAt(i, 5).toString(),
+                    tbaReporteCompra.getValueAt(i, 6).toString(),
+                    tbaReporteCompra.getValueAt(i, 7).toString(),
+                    txtDescuentlo.getText(), Txt_iva.getText(), Txt_Total.getText());
             lista.add(creporte);
         }
 
         try {
 
-
 //            JasperReport report = (JasperReport) JRLoader.loadObject(System.getProperty("user.dir") + "/Reportes/ReporteriaCompras.jasper");
             JasperReport report = (JasperReport) JRLoader.loadObject(getClass().getResource("/Reportes/ReporteriaCompras.jasper"));
             JasperPrint jprint = JasperFillManager.fillReport(report, null, new JRBeanCollectionDataSource(lista));
             JDialog ventana = new JDialog();
-           
+
 //            JRViewer jviewer = new JRViewer(jprint);
             net.sf.jasperreports.view.JRViewer jviewer = new net.sf.jasperreports.view.JRViewer(jprint);
             ventana.add(jviewer);
-            ventana.setSize(new Dimension(ancho/2,alto/2));
+            ventana.setSize(new Dimension(ancho / 2, alto / 2));
             ventana.setLocationRelativeTo(null);
             ventana.setVisible(true);
             jviewer.setFitWidthZoomRatio();
-           
 
-           
-           
         } catch (JRException ex) {
             Logger.getLogger(ReporteriaCompras.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -549,6 +588,147 @@ public class ReporteriaCompras extends javax.swing.JDialog {
             busquedaChosserQuery();
         }
     }//GEN-LAST:event_BtnBuscar1KeyPressed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        reporte();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    public static void reporte() {
+
+        int r = JOptionPane.showConfirmDialog(null, "¿Generar Reporte?", "", JOptionPane.YES_NO_OPTION);
+
+        if (r == JOptionPane.YES_OPTION) {
+            Workbook book = new XSSFWorkbook();
+            Sheet sheet = book.createSheet("compras");
+
+            try {
+                InputStream is = new FileInputStream("src\\ec\\com\\asofar\\imagenes\\3.png");
+                byte[] bytes = IOUtils.toByteArray(is);
+                int imgIndex = book.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
+                is.close();
+
+                CreationHelper help = book.getCreationHelper();
+                Drawing draw = sheet.createDrawingPatriarch();
+
+                ClientAnchor anchor = help.createClientAnchor();
+                anchor.setCol1(0);
+                anchor.setRow1(1);
+                Picture pict = draw.createPicture(anchor, imgIndex);
+                pict.resize(2, 2);
+
+                CellStyle tituloEstilo = book.createCellStyle();
+                tituloEstilo.setAlignment(HorizontalAlignment.CENTER);
+                tituloEstilo.setVerticalAlignment(VerticalAlignment.CENTER);
+                Font fuenteTitulo = book.createFont();
+                fuenteTitulo.setFontName("Arial");
+                fuenteTitulo.setBold(true);
+                fuenteTitulo.setFontHeightInPoints((short) 14);
+                tituloEstilo.setFont(fuenteTitulo);
+
+                Row filaTitulo = sheet.createRow(3);
+                Cell celdaTitulo = filaTitulo.createCell(3);
+                celdaTitulo.setCellStyle(tituloEstilo);
+                celdaTitulo.setCellValue("Reporte Compras");
+
+                sheet.addMergedRegion(new CellRangeAddress(1, 2, 1, 1));
+
+                String[] cabecera = new String[]{"COD.COMPRA", "TIPO DOC.", "FECHA ENTREGA", "PROVEEDOR", "SUBTOTAL", "T.IVA", "T.DESCUENTO", "T.COMPRA"};
+
+                CellStyle headerStyle = book.createCellStyle();
+                headerStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
+                headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                headerStyle.setBorderBottom(BorderStyle.THIN);
+                headerStyle.setBorderLeft(BorderStyle.THIN);
+                headerStyle.setBorderRight(BorderStyle.THIN);
+                headerStyle.setBorderBottom(BorderStyle.THIN);
+
+                Font font = book.createFont();
+                font.setFontName("Arial");
+                font.setBold(true);
+                font.setColor(IndexedColors.WHITE.getIndex());
+                font.setFontHeightInPoints((short) 12);
+                headerStyle.setFont(font);
+
+                Row filaEncabezados = sheet.createRow(7);
+
+                for (int i = 0; i < cabecera.length; i++) {
+                    Cell celdaEnzabezado = filaEncabezados.createCell(i);
+                    celdaEnzabezado.setCellStyle(headerStyle);
+                    celdaEnzabezado.setCellValue(cabecera[i]);
+                }
+
+                Conexion con = new Conexion();
+                PreparedStatement ps;
+                ResultSet rs;
+                Connection conn = con.getConexion();
+
+                int numFilaDatos = 8;
+
+                CellStyle datosEstilo = book.createCellStyle();
+                datosEstilo.setBorderBottom(BorderStyle.THIN);
+                datosEstilo.setBorderLeft(BorderStyle.THIN);
+                datosEstilo.setBorderRight(BorderStyle.THIN);
+                datosEstilo.setBorderBottom(BorderStyle.THIN);
+
+                ps = conn.prepareStatement("SELECT cc.id_orden_compra,  td.nombre_documento, cc.fecha_entrega, cp.nombre, cc.total_subtotal,\n"
+                        + "cc.total_iva, cc.total_descuento, cc.total_compra\n"
+                        + "FROM co_orden_compras cc \n"
+                        + "left join in_tipo_documento td on cc.id_tipo_documento= td.id_tipo_documento\n"
+                        + "left join co_proveedores cp on cc.id_proveedor= cp.id_proveedor;");
+                rs = ps.executeQuery();
+
+                int numCol = rs.getMetaData().getColumnCount();
+
+                while (rs.next()) {
+                    Row filaDatos = sheet.createRow(numFilaDatos);
+
+                    for (int a = 0; a < numCol; a++) {
+
+                        Cell CeldaDatos = filaDatos.createCell(a);
+                        CeldaDatos.setCellStyle(datosEstilo);
+
+                        if (a == 0) {
+                            CeldaDatos.setCellValue(rs.getInt(a + 1));
+                        } else {
+                            CeldaDatos.setCellValue(rs.getString(a + 1));
+                        }
+                    }
+                    /*Cell celdaImporte = filaDatos.createCell(4);
+                celdaImporte.setCellStyle(datosEstilo);
+                celdaImporte.setCellFormula(String.format("C%d+D%d", numFilaDatos + 1, numFilaDatos + 1));
+                     */
+                    numFilaDatos++;
+
+                }
+                conn.close();
+                sheet.autoSizeColumn(0);
+                sheet.autoSizeColumn(1);
+                sheet.autoSizeColumn(2);
+                sheet.autoSizeColumn(3);
+                sheet.autoSizeColumn(4);
+                sheet.autoSizeColumn(5);
+                sheet.autoSizeColumn(6);
+                sheet.autoSizeColumn(7);
+
+                sheet.setZoom(150);
+
+                FileOutputStream fileOut = new FileOutputStream("ReporteCompras.xlsx");
+                book.write(fileOut);
+                fileOut.close();
+
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(ReporteriaCompras.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(ReporteriaCompras.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(ReporteriaCompras.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            JOptionPane.showMessageDialog(null, "Generado con exito");
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al generar el reporte");
+        }
+
+    }
 
     /**
      * @param args the command line arguments
@@ -604,6 +784,7 @@ public class ReporteriaCompras extends javax.swing.JDialog {
     private javax.swing.JButton btnSalir2;
     private javax.swing.JTextField buscar1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

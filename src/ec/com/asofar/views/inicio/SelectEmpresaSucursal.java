@@ -235,7 +235,7 @@ public class SelectEmpresaSucursal extends javax.swing.JDialog {
         PantallaPrincipal pp = new PantallaPrincipal(us, em, su);
         setVisible(false);
         pp.setVisible(true);
-        respaldar();
+        //respaldar();
     }//GEN-LAST:event_jButton1ActionPerformed
     
     private void respaldar() {

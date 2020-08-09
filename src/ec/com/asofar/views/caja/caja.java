@@ -1,17 +1,26 @@
 package ec.com.asofar.views.caja;
 
-
+import com.mysql.jdbc.Connection;
 import ec.com.asofar.dao.VeCajaJpaController;
 import ec.com.asofar.dto.SeEmpresa;
 import ec.com.asofar.dto.SeSucursal;
 import ec.com.asofar.dto.SeUsuarios;
 import ec.com.asofar.dto.VeCaja;
 import ec.com.asofar.util.ClaseReporte;
+import ec.com.asofar.util.Conexion;
 import ec.com.asofar.util.EntityManagerUtil;
 import ec.com.asofar.util.Tablas;
 import java.awt.Dimension;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -25,12 +34,31 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.swing.JRViewer;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Drawing;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Picture;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.util.IOUtils;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
  * @author admin1
  */
 public class caja extends javax.swing.JDialog {
+
     int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
     List<VeCaja> lista;
@@ -40,17 +68,17 @@ public class caja extends javax.swing.JDialog {
     SeUsuarios seUsuario;
     SeEmpresa seEmpresa;
     SeSucursal seSucursal;
-    
+
     public caja(java.awt.Frame parent, boolean modal) {
-        super(parent, modal=false);
+        super(parent, modal = false);
         initComponents();
         cargarInformacion();
         setLocationRelativeTo(null);
-        
+
     }
-    
+
     public caja(java.awt.Frame parent, boolean modal, SeUsuarios us, SeEmpresa em, SeSucursal su) {
-        super(parent, modal=false);
+        super(parent, modal = false);
         initComponents();
         cargarInformacion();
         setLocationRelativeTo(null);
@@ -58,17 +86,17 @@ public class caja extends javax.swing.JDialog {
         this.seEmpresa = em;
         this.seSucursal = su;
     }
-    
+
     private void cargarInformacion() {
         try {
             lista = vCaja.findVeCajaEntities();
             Tablas.TablaCajaActiva(lista, tbCajas);
         } catch (Exception e) {
-            
+
         }
-        
+
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -84,6 +112,7 @@ public class caja extends javax.swing.JDialog {
         btnsalir = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         btnimprimir = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -201,18 +230,30 @@ public class caja extends javax.swing.JDialog {
             }
         });
 
+        jButton3.setBackground(new java.awt.Color(254, 254, 254));
+        jButton3.setFont(new java.awt.Font("Ubuntu", 1, 10)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(1, 1, 1));
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/excel.png"))); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtfiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -233,10 +274,12 @@ public class caja extends javax.swing.JDialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtfiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(txtfiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -282,7 +325,7 @@ public class caja extends javax.swing.JDialog {
     }//GEN-LAST:event_btnsalirActionPerformed
 
     private void tbCajasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbCajasMousePressed
-        
+
         int id = 0;
         vc = null;
         if (evt.getClickCount() == 2) {
@@ -315,7 +358,7 @@ public class caja extends javax.swing.JDialog {
     }//GEN-LAST:event_txtfiltroKeyTyped
 
     private void txtfiltroKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtfiltroKeyReleased
-        
+
         String valor = txtfiltro.getText();
         Tablas.filtro(valor, tbCajas);
     }//GEN-LAST:event_txtfiltroKeyReleased
@@ -330,29 +373,164 @@ public class caja extends javax.swing.JDialog {
 
     private void btnimprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnimprimirActionPerformed
         ArrayList lista = new ArrayList();
-        for(int i=0; i<tbCajas.getRowCount();i++){
-            ClaseReporte creporte = new ClaseReporte(tbCajas.getValueAt(i,0).toString(),
-                                                     tbCajas.getValueAt(i,1).toString(),
-                                                     tbCajas.getValueAt(i,2).toString(),
-                                                     tbCajas.getValueAt(i,3).toString(),
-                                                     tbCajas.getValueAt(i,4).toString());
+        for (int i = 0; i < tbCajas.getRowCount(); i++) {
+            ClaseReporte creporte = new ClaseReporte(tbCajas.getValueAt(i, 0).toString(),
+                    tbCajas.getValueAt(i, 1).toString(),
+                    tbCajas.getValueAt(i, 2).toString(),
+                    tbCajas.getValueAt(i, 3).toString(),
+                    tbCajas.getValueAt(i, 4).toString());
             lista.add(creporte);
         }
+        try {
+            JasperReport reporte = (JasperReport) JRLoader.loadObject(System.getProperty("user.dir") + "/Reportes/caja.jasper");
+            JasperPrint jprint = JasperFillManager.fillReport(reporte, null, new JRBeanCollectionDataSource(lista));
+            JRViewer jviewer = new JRViewer(jprint);
+            JDialog ventana = new JDialog();
+            ventana.add(jviewer);
+            ventana.setVisible(true);
+            ventana.setSize(new Dimension(ancho / 2, alto / 2));
+            ventana.setLocationRelativeTo(null);
+            jviewer.setFitWidthZoomRatio();
+        } catch (JRException ex) {
+            Logger.getLogger(caja.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_btnimprimirActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        reporte();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    public static void reporte() {
+
+        int r = JOptionPane.showConfirmDialog(null, "¿Generar Reporte?", "", JOptionPane.YES_NO_OPTION);
+
+        if (r == JOptionPane.YES_OPTION) {
+            Workbook book = new XSSFWorkbook();
+            Sheet sheet = book.createSheet("caja");
+
             try {
-                JasperReport reporte = (JasperReport)JRLoader.loadObject(System.getProperty("user.dir")+"/Reportes/caja.jasper");
-                JasperPrint jprint = JasperFillManager.fillReport(reporte,null,new JRBeanCollectionDataSource(lista));
-                JRViewer jviewer = new JRViewer(jprint);
-                JDialog ventana = new JDialog();
-                ventana.add(jviewer);
-                ventana.setVisible(true);
-                ventana.setSize(new Dimension(ancho/2,alto/2));
-                ventana.setLocationRelativeTo(null);
-                jviewer.setFitWidthZoomRatio();
-            } catch (JRException ex) {
+                InputStream is = new FileInputStream("src\\ec\\com\\asofar\\imagenes\\3.png");
+                byte[] bytes = IOUtils.toByteArray(is);
+                int imgIndex = book.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
+                is.close();
+
+                CreationHelper help = book.getCreationHelper();
+                Drawing draw = sheet.createDrawingPatriarch();
+
+                ClientAnchor anchor = help.createClientAnchor();
+                anchor.setCol1(0);
+                anchor.setRow1(1);
+                Picture pict = draw.createPicture(anchor, imgIndex);
+                pict.resize(2, 2);
+
+                CellStyle tituloEstilo = book.createCellStyle();
+                tituloEstilo.setAlignment(HorizontalAlignment.CENTER);
+                tituloEstilo.setVerticalAlignment(VerticalAlignment.CENTER);
+                Font fuenteTitulo = book.createFont();
+                fuenteTitulo.setFontName("Arial");
+                fuenteTitulo.setBold(true);
+                fuenteTitulo.setFontHeightInPoints((short) 14);
+                tituloEstilo.setFont(fuenteTitulo);
+
+                Row filaTitulo = sheet.createRow(3);
+                Cell celdaTitulo = filaTitulo.createCell(3);
+                celdaTitulo.setCellStyle(tituloEstilo);
+                celdaTitulo.setCellValue("Reporte Caja");
+
+                sheet.addMergedRegion(new CellRangeAddress(1, 2, 1, 1));
+
+                String[] cabecera = new String[]{"Código", "Nombre Caja", "Usuario", "Fecha de Creacion", "Fecha de Actualizacion", "Estado"};
+
+                CellStyle headerStyle = book.createCellStyle();
+                headerStyle.setFillForegroundColor(IndexedColors.LIGHT_BLUE.getIndex());
+                headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                headerStyle.setBorderBottom(BorderStyle.THIN);
+                headerStyle.setBorderLeft(BorderStyle.THIN);
+                headerStyle.setBorderRight(BorderStyle.THIN);
+                headerStyle.setBorderBottom(BorderStyle.THIN);
+
+                Font font = book.createFont();
+                font.setFontName("Arial");
+                font.setBold(true);
+                font.setColor(IndexedColors.WHITE.getIndex());
+                font.setFontHeightInPoints((short) 12);
+                headerStyle.setFont(font);
+
+                Row filaEncabezados = sheet.createRow(5);
+
+                for (int i = 0; i < cabecera.length; i++) {
+                    Cell celdaEnzabezado = filaEncabezados.createCell(i);
+                    celdaEnzabezado.setCellStyle(headerStyle);
+                    celdaEnzabezado.setCellValue(cabecera[i]);
+                }
+
+                Conexion con = new Conexion();
+                PreparedStatement ps;
+                ResultSet rs;
+                Connection conn = con.getConexion();
+
+                int numFilaDatos = 6;
+
+                CellStyle datosEstilo = book.createCellStyle();
+                datosEstilo.setBorderBottom(BorderStyle.THIN);
+                datosEstilo.setBorderLeft(BorderStyle.THIN);
+                datosEstilo.setBorderRight(BorderStyle.THIN);
+                datosEstilo.setBorderBottom(BorderStyle.THIN);
+
+                ps = conn.prepareStatement("SELECT id_caja, nombre, usuario_creacion, fecha_creacion, fecha_actualizacion, estado FROM ve_caja");
+                rs = ps.executeQuery();
+
+                int numCol = rs.getMetaData().getColumnCount();
+
+                while (rs.next()) {
+                    Row filaDatos = sheet.createRow(numFilaDatos);
+
+                    for (int a = 0; a < numCol; a++) {
+
+                        Cell CeldaDatos = filaDatos.createCell(a);
+                        CeldaDatos.setCellStyle(datosEstilo);
+
+                        if (a == 0) {
+                            CeldaDatos.setCellValue(rs.getInt(a + 1));
+                        } else {
+                            CeldaDatos.setCellValue(rs.getString(a + 1));
+                        }
+                    }
+                    /*Cell celdaImporte = filaDatos.createCell(4);
+                celdaImporte.setCellStyle(datosEstilo);
+                celdaImporte.setCellFormula(String.format("C%d+D%d", numFilaDatos + 1, numFilaDatos + 1));
+                     */
+                    numFilaDatos++;
+
+                }
+                conn.close();
+                sheet.autoSizeColumn(0);
+                sheet.autoSizeColumn(1);
+                sheet.autoSizeColumn(2);
+                sheet.autoSizeColumn(3);
+                sheet.autoSizeColumn(4);
+                sheet.autoSizeColumn(5);
+
+                sheet.setZoom(150);
+
+                FileOutputStream fileOut = new FileOutputStream("ReporteCaja.xlsx");
+                book.write(fileOut);
+                fileOut.close();
+
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(caja.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(caja.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
                 Logger.getLogger(caja.class.getName()).log(Level.SEVERE, null, ex);
             }
-        
-    }//GEN-LAST:event_btnimprimirActionPerformed
+            JOptionPane.showMessageDialog(null, "Generado con exito");
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al generar el reporte");
+        }
+
+    }
 
     /**
      * @param args the command line arguments
@@ -368,21 +546,21 @@ public class caja extends javax.swing.JDialog {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
-                    
+
                 }
             }
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(caja.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(caja.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(caja.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-            
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(caja.class
                     .getName()).log(java.util.logging.Level.SEVERE, null, ex);
@@ -664,6 +842,7 @@ public class caja extends javax.swing.JDialog {
     private javax.swing.JButton btnimprimir;
     private javax.swing.JButton btnsalir;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
