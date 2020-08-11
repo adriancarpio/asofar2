@@ -16,14 +16,12 @@ import ec.com.asofar.dto.SeUsuarios;
 import ec.com.asofar.util.EntityManagerUtil;
 import java.awt.MouseInfo;
 import java.awt.Point;
-import java.io.BufferedReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 /**
  *
@@ -65,13 +63,13 @@ public class SelectEmpresaSucursal extends javax.swing.JDialog {
     public void comboEmpresa(SeUsuarios user) {
 
         listausr = susrjc.findSeUsuarioSucurRolEntities();
-        
+
         listaempresa = sejc.findSeEmpresaEntities();
-        
+
         for (int j = 0; j < listaempresa.size(); j++) {
 //            if (Objects.equals(listausr.get(j).getIdUsuario().getIdUsuario(), user.getIdUsuario())) {
-                cbempresa.addItem(listaempresa.get(j).getNombreComercial());
-                System.out.println("lista: "+listaempresa.get(j).getNombreComercial());
+            cbempresa.addItem(listaempresa.get(j).getNombreComercial());
+            System.out.println("lista: " + listaempresa.get(j).getNombreComercial());
 //            }
         }
     }
@@ -237,66 +235,36 @@ public class SelectEmpresaSucursal extends javax.swing.JDialog {
         pp.setVisible(true);
         //respaldar();
     }//GEN-LAST:event_jButton1ActionPerformed
-    
+
     private void respaldar() {
         try {
-            
-             Date myDate = new Date();
-             String nombre = ("asofar" + new SimpleDateFormat("-dd-MM-yyyy").format(myDate)+".sql");
+            Date myDate = new Date();
+            String nombre = ("bd_farmacia_desa " + new SimpleDateFormat("-dd-MM-yyyy").format(myDate) + ".sql");
+            String ruta = "C:\\Users\\adria\\OneDrive\\Escritorio\\base d datos\\";
+            Process p = Runtime.getRuntime().exec("mysqldump -u root -proot bd_farmacia_desa");
 
-//Aquí obtienes el formato que deseas
-            System.out.println(new SimpleDateFormat("dd/MM/yyyy").format(myDate));
-            /* - Datos de acceso a nuestra base de datos */
-            /* Usa localhost si el servidor corre en la misma maquina, de lo 
-            contrario utiliza la IP o dirección del sevidor*/
-            String dbServer = "localhost";
-            /* El usuario de tu base de datos*/
-            String dbName = "bd_farmacia_desa";
-            /* El usuario de tu base de datos*/
-            String dbUser = "root";
-            /* La contraseña de la base de datos (dejarla en texto plano puede 
-            ser un problema)*/
-            String dbPass = "";
-            
-            /*El nombre o ruta a donde se guardara el archivo de volcado .sql*/
-            String sqlFile = "C:\\Users\\adria\\Documents\\dumps" + nombre;
+            InputStream is = p.getInputStream();//Pedimos la entrada
+            FileOutputStream fos = new FileOutputStream(ruta + nombre); //creamos el archivo para le respaldo
+            byte[] buffer = new byte[1000]; //Creamos una variable de tipo byte para el buffer
 
-            /* La linea de comando completa que ejecutara el programa*/
-            String command = "bin/mysqldump "+"-h"+dbServer+" -u" + dbUser
-                    + " -p" + dbPass + "" + dbName + " -r " + sqlFile;
-
-            /*Se crea un proceso que ejecuta el comando dado*/
-            Process bck = Runtime.getRuntime().exec(command);
-            
-            /* Obtiene el flujo de datos del proceso, esto se hace para obtener 
-            el texto del proceso*/
-            InputStream stdout = bck.getErrorStream();
-            
-            /* Se obtiene el resultado de finalizacion del proceso*/
-            int resultado1 = bck.waitFor();
-
-            
-            String line;
-
-            /* Se crea un buffer de lectura con el flujo de datos outstd y ese mismo
-            sera leido e impreso, esto mostrara el texto que muestre el programa
-            mysqldump, de esta forma sabra cual es el error en su comando*/
-            BufferedReader brCleanUp
-                    = new BufferedReader(new InputStreamReader(stdout));
-            while ((line = brCleanUp.readLine()) != null) {
-                System.out.println(line);
+            int leido = is.read(buffer); //Devuelve el número de bytes leídos o -1 si se alcanzó el final del stream.
+            while (leido > 0) {
+                fos.write(buffer, 0, leido);//Buffer de caracteres, Desplazamiento de partida para empezar a escribir caracteres, Número de caracteres para escribir
+                leido = is.read(buffer);
             }
-            brCleanUp.close();
-            
-            if (resultado1 == 0) {
-                System.out.println("Respaldo exitoso");
+
+            if (leido == 0) {
+                System.out.println("Respaldo error");
             } else {
-                System.out.println("Error al respaldar");
+                System.out.println("Respaldo exitoso");
             }
-        } catch (IOException | InterruptedException ex) {
+
+            fos.close();//Cierra respaldo
+        } catch (IOException ex) {
             System.out.println("Exception: " + ex.getMessage());
         }
     }
+
     private void jLabel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MousePressed
         x = evt.getX();
         y = evt.getY();
