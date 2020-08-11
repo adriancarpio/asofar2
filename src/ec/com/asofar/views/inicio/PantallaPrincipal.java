@@ -232,6 +232,20 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             }
 
         }
+        
+        JMenuItem info = new JMenuItem("INFO.");
+        info.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/info.png")));
+        info.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        info.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        info.setPreferredSize(new java.awt.Dimension(90, 65));
+        info.setMinimumSize(new Dimension(20, 20));
+        info.setMaximumSize(new Dimension(90, 70));
+        info.setPreferredSize(new Dimension(120, 30));
+        info.setOpaque(true);
+        info.setBackground(Color.GRAY);
+        info.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        meMenuBase.add(info);
+       
 
         JMenuItem backup = new JMenuItem("SALIR");
         backup.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ec/com/asofar/icon/SALIR.png")));
